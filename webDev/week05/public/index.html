@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.6/axios.min.js"></script>
+    <script>
+        async function sum(){
+            await axios.post("http://localhost:3000/sumPost",{
+                a:document.getElementById('a').value,
+                b:document.getElementById('b').value
+            })
+            
+        }
+    </script>
+    <title>Document</title>
+</head>
+<body>
+    <input id="a" type="text" placeholder="enter the value of a"?/>
+    <input id="b" type="text" placeholder="enter the value of b"?/>
+    <button onclick="sum()">Sum</button>
+</body>
+</html>
