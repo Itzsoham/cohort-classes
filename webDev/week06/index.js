@@ -1,10 +1,11 @@
 const express = require("express");
+const cors = require("cors");
 const JWT_SECRET = "whyalwaysfuckeduplikekaizen";
 const jwt = require("jsonwebtoken");
 const app = express();
 
 app.use(express.json());
-
+app.use(cors());
 const user = [];
 
 // function generateToken() {
@@ -126,6 +127,19 @@ app.post("/signing-in", function (req, res) {
   }
 });
 
+function auth(req, res, next) {
+  const token = req.headers.token;
+  const decodedData = jwt.verify(token, JWT_SECRET);
+  if (decodedData.username) {
+    req.username = decodedData.username;
+    next();
+  } else {
+    res.json({
+      massege: "You are not logged in",
+    });
+  }
+}
+
 // app.get("/me", (req, res) => {
 //   const token = req.headers.authorization;
 //   const decodedInfo = jwt.verify(token, JWT_SECRET);
@@ -147,16 +161,14 @@ app.post("/signing-in", function (req, res) {
 //   }
 // });
 
-app.get("/me", (req, res) => {
-  const token = req.headers.token;
-  const userDetails = jwt.verify(token, JWT_SECRET);
+app.get("/me", auth, (req, res) => {
+  const username = req.username;
+  const foundUsers = user.find((user) => user.username === username);
 
-  const username = userDetails.username;
-  const users = user.find((user) => user.username === username);
-
-  if (users) {
+  if (foundUsers) {
     res.send({
-      username: users.username,
+      username: foundUsers.username,
+      password: foundUsers.password,
     });
   } else {
     res.status(401).send({
