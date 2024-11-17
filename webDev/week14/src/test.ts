@@ -4,7 +4,12 @@
 interface UserType {
   firstName: string;
   age: number;
-  dob: Date;
+  dob?: Date;
+}
+
+interface Customer {
+  info: UserType; // interface can use other interface for reusebility
+  phone: number;
 }
 
 let welcome = (user: UserType) => console.log("yo " + user.firstName);
@@ -15,6 +20,12 @@ let user = {
   dob: new Date("2011-11-11"),
 };
 
+let user2: UserType = {
+  firstName: "Kai",
+  age: 7,
+};
+
+welcome(user);
 welcome(user);
 isLegal(user.age);
 
