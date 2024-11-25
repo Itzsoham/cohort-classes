@@ -12,7 +12,10 @@ function App() {
   useEffect(() => {
     const ws = new WebSocket("ws://localhost:8080");
     ws.onmessage = (event) => {
-      setMessages((prev) => [...prev, event.data]);
+      const parsedMessage = JSON.parse(event.data);
+      if (parsedMessage.type === "message") {
+        setMessages((prev) => [...prev, parsedMessage.payload.message]);
+      }
     };
     wsRef.current = ws;
 
@@ -80,6 +83,7 @@ function App() {
         {messages.map((message) => {
           return (
             <input
+              key={message}
               type="text"
               className="p-2.5 rounded-md"
               value={message}
